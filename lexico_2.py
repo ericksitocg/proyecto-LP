@@ -332,7 +332,7 @@ def p_entrada(p):
                 | funcion
                 | empty
                 | importar_libreria"""
-    p[0] = p[1]
+    # p[0] = ('entrada', p[1])
 
 ####################################################
 
@@ -365,7 +365,8 @@ def p_condicional_if(p):
 
 def p_bucle_for(p):
     """ bucle_for : FOR IDENTIFICADOR IN IDENTIFICADOR DOSPUNTOS
-                  | FOR IDENTIFICADOR IN range DOSPUNTOS"""
+                  | FOR IDENTIFICADOR IN range DOSPUNTOS
+                  | FOR IDENTIFICADOR IN coleccion"""
     p[0] = p[1]
 #####################################################
 
@@ -409,7 +410,9 @@ def p_asignacion(p):
                     | IDENTIFICADOR ASIGNAR casting
                     | IDENTIFICADOR ASIGNAR CORIZQ coleccion CORDER
                     | IDENTIFICADOR ASIGNAR  coleccion """
+    # p[0] = ('asignacion',p[1],p[3])
     names[p[1]] = p[3]
+
 
 # def p_lista_coleccion(p):
 #     """ lista_coleccion : CORIQZ coleccion CORDER
@@ -584,7 +587,7 @@ def p_error(p):
     # estado = "** Semantica no valida en la Linea {:4} Valor {:4} Posicion {:4} Tipo {:4}".format(str(p.lineno-1), str(p.value),str(p.lexpos),str(p.type))
     # estado = "** Semantica no valida Valor {:4} Posicion {:4} Tipo {:4}".format(str(p.value),str(p.lexpos),str(p.type))
 
-    estado="** Semantica no valida"
+    estado="** Sintactica no valida"
     result_sem.append(estado+"\n")
 
 
