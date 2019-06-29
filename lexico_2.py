@@ -164,18 +164,18 @@ def t_CADENA(t):
 #     return t
 
 def t_LISTA_SIMPLE(t):
-    r'\[-?\w\]'
+    r'\[-?\w+\]'
     return t
 def t_LISTA_DOBLE(t):
-    r'\[-?\w,-?\w\]'
+    r'\[-?\w+,-?\w+\]'
     return t
 
 def t_LISTA_TRIPLE(t):
-    r'\[-?\w,-?\w\,-?\w]'
+    r'\[-?\w+,-?\w+\,-?\w+]'
     return t
 
 def t_LISTA(t):
-    r'\[(-?\w,|-?\w)+\]'
+    r'\[(-?\w+,|-?\w+)+\]'
     return t
 
 # def t_TUPLA(t):
@@ -407,7 +407,8 @@ def p_asignacion(p):
                     | IDENTIFICADOR ASIGNAR dato
                     | IDENTIFICADOR ASIGNAR funcion
                     | IDENTIFICADOR ASIGNAR casting
-                    | IDENTIFICADOR ASIGNAR coleccion"""
+                    | IDENTIFICADOR ASIGNAR CORIZQ coleccion CORDER
+                    | IDENTIFICADOR ASIGNAR  coleccion """
     names[p[1]] = p[3]
 
 # def p_lista_coleccion(p):
@@ -468,7 +469,8 @@ def p_coleccion(p):
                     | TUPLA_SIMPLE
                     | TUPLA_DOBLE
                     | TUPLA_TRIPLE
-                    | TUPLA"""
+                    | TUPLA
+                    | coleccion COMA"""
 
     p[0] = p[1]
 ####################################
