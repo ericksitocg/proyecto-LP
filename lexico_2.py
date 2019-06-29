@@ -366,7 +366,7 @@ def p_condicional_if(p):
 def p_bucle_for(p):
     """ bucle_for : FOR IDENTIFICADOR IN IDENTIFICADOR DOSPUNTOS
                   | FOR IDENTIFICADOR IN range DOSPUNTOS
-                  | FOR IDENTIFICADOR IN coleccion"""
+                  | FOR IDENTIFICADOR IN coleccion DOSPUNTOS"""
     p[0] = p[1]
 #####################################################
 
@@ -625,7 +625,7 @@ ej10="10.Realice un programa en Python que calcule el promedio de edad de trabaj
 
 sol1='''sueldo= int(input("Ingrese su sueldo mensual sin decimales: "))
 anual=sueldo*12
-if(anual>11310):
+if anual>11310 :
     print("tiene que pagar impuesto")
 else:
     print("no tiene que pagar impuestos")
@@ -635,7 +635,7 @@ sol2='''for i in range(0,101,2):
     print(i)
 '''
 sol3='''nota=float(input("Ingrese su nota con decimales: "))
-if(nota>=6.00):
+if nota>=6.00 :
     print("Aprobo la materia!")
 else:
     falta= 6.00-nota
@@ -671,7 +671,9 @@ if n_trabajadores.isdigit():
 
     for trabajador in range(n_trabajadores):
         print("Ingrese el nombre y sueldo del trabajador con el siguiente formato: nombre,sueldo")
-        nombre,sueldo = input("Datos empleado %i :"%trabajador).split(",")
+        nombre=input("Nombre empleado  :")
+        sueldo= input("Sueldo empleado :")
+        
         sueldo=float(sueldo)
 
         impuesto = sueldo*0.05
@@ -681,8 +683,7 @@ if n_trabajadores.isdigit():
             nombre_mayor = nombre
 print("El trabajador que paga mas impuestos es %s  que paga %.2f"%(nombre_mayor,impuesto_mayor))
 '''
-sol7='''
-import random as rd
+sol7='''import random as rd
 ale = rd.randint(0,50)
 juego_terminado = False
 for vida in range(5):
@@ -703,7 +704,7 @@ else:
 sol8='''numero_ganador = ""
 for i in range(5):
     aleatorio = rd.randint(0,9)
-    numero_ganador+=str(aleatorio)
+    numero_ganador=str(aleatorio)
 
 usuario = input("Ingrese su numero de loteria: ")
 
