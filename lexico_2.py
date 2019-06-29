@@ -164,18 +164,18 @@ def t_CADENA(t):
 #     return t
 
 def t_LISTA_SIMPLE(t):
-    r'\[\w+\]'
+    r'\[-?\w\]'
     return t
 def t_LISTA_DOBLE(t):
-    r'\[\w,\w\]'
+    r'\[-?\w,-?\w\]'
     return t
 
-def t_LISTA_TRIPLE(p):
-    r'\[\w,\w\,\w]'
+def t_LISTA_TRIPLE(t):
+    r'\[-?\w,-?\w\,-?\w]'
     return t
 
 def t_LISTA(t):
-    r'\[(\w,|\w)+\]'
+    r'\[(-?\w,|-?\w)+\]'
     return t
 
 # def t_TUPLA(t):
@@ -355,8 +355,13 @@ def p_condicional_if(p):
     """condicional_if : IF expresion_logica DOSPUNTOS
                         | IF expresion_logica_compuesta DOSPUNTOS
                         | IF BOOLEAN DOSPUNTOS
-                        | IF IDENTIFICADOR IN IDENTIFICADOR DOSPUNTOS"""
+                        | IF IDENTIFICADOR IN IDENTIFICADOR DOSPUNTOS
+                        | IF NOT expresion_logica DOSPUNTOS
+                        | IF identificador_slicing DOSPUNTOS"""
     p[0] = p[1]
+
+#    if usuario[-1]:
+
 
 def p_bucle_for(p):
     """ bucle_for : FOR IDENTIFICADOR IN IDENTIFICADOR DOSPUNTOS
@@ -401,8 +406,19 @@ def p_asignacion(p):
                     | IDENTIFICADOR ASIGNAR operacion_compuesta
                     | IDENTIFICADOR ASIGNAR dato
                     | IDENTIFICADOR ASIGNAR funcion
-                    | IDENTIFICADOR ASIGNAR casting"""
+                    | IDENTIFICADOR ASIGNAR casting
+                    | IDENTIFICADOR ASIGNAR coleccion"""
     names[p[1]] = p[3]
+
+# def p_lista_coleccion(p):
+#     """ lista_coleccion : CORIQZ coleccion CORDER
+#                         | coleccion COMA
+#                         | CORIQZ coleccion COMA
+#                         | coleccion COMA CORDER
+#                         | lista_coleccion
+#                         """
+
+# L_tienda = [("cafe",3.50),("leche",1.50),("pan",0.25),("azucar",0.50),("pastel",5)]
 
 def p_casting(p):
     """ casting : tipo_dato PARIZQ asignacion PARDER
@@ -427,7 +443,8 @@ def p_operacion_compuesta(p):
     p[0] = p[1]
 
 def p_operacion(p):
-    """ operacion : dato operador dato"""
+    """ operacion : dato operador dato
+    | IDENTIFICADOR operador dato"""
     p[0] = p[1]
     # if p[2] == '+': p[0] = p[1] + p[3]
     # if p[2] == '-': p[0] = p[1] - p[3]
@@ -452,6 +469,7 @@ def p_coleccion(p):
                     | TUPLA_DOBLE
                     | TUPLA_TRIPLE
                     | TUPLA"""
+
     p[0] = p[1]
 ####################################
 
@@ -467,11 +485,14 @@ def p_funcion_print(p):
     """ funcion_print : PRINT PARIZQ PARDER
                         | PRINT PARIZQ CADENA PARDER
                         | PRINT PARIZQ CADENA MODULO IDENTIFICADOR PARDER
+                        | PRINT PARIZQ CADENA MODULO TUPLA_DOBLE PARDER
                         | PRINT TUPLA_SIMPLE
                         | PRINT TUPLA_DOBLE
                         | PRINT TUPLA_TRIPLE
                         | PRINT TUPLA """
     p[0] = p[1]
+
+# print("El trabajador que paga mas impuestos es %s  que paga %.2f"%(nombre_mayor,impuesto_mayor))
 
 def p_funcion_random_randint(p):
     """funcion_random_randint : RANDOM PUNTO RANDINT TUPLA_SIMPLE
@@ -482,7 +503,8 @@ def p_funcion_random_randint(p):
 
 def p_funcion_input(p):
     """ funcion_input : INPUT PARIZQ CADENA PARDER
-                        | INPUT PARIZQ PARDER"""
+                        | INPUT PARIZQ PARDER
+                        | INPUT PARIZQ CADENA MODULO IDENTIFICADOR PARDER"""
     p[0] = p[1]
 
 def p_funcion_sum(p):
@@ -546,6 +568,7 @@ def p_dato(p):
                 | FLOTANTE
                 | INTEGER
                 | CADENA
+                | BOOLEAN
                 | identificador_atributo
                 | identificador_slicing"""
      p[0] = p[1]
@@ -557,8 +580,9 @@ def p_empty(p):
 def p_error(p):
     global result_sem
     # estado = "** Semantica no valida en la Linea {:4} Valor {:4} Posicion {:4} Tipo {:4}".format(str(p.lineno-1), str(p.value),str(p.lexpos),str(p.type))
-    estado = "** Semantica no valida Valor {:4} Posicion {:4} Tipo {:4}".format(str(p.value),str(p.lexpos),str(p.type))
+    # estado = "** Semantica no valida Valor {:4} Posicion {:4} Tipo {:4}".format(str(p.value),str(p.lexpos),str(p.type))
 
+    estado="** Semantica no valida"
     result_sem.append(estado+"\n")
 
 
@@ -996,6 +1020,8 @@ def validar():
         else:
             parser.parse(linea)
 
+
+
             # ast = parser.parse(linea)
             # if len(result_sem) == 0:
             #     estaBienSintactico = 1
@@ -1005,6 +1031,9 @@ def validar():
             #     for i in result_sem:
             #         textoResultadoAnalisis.insert(1.0, str(i))
 
+    if len(result_sem)==0:
+        estaBienSintactico=1
+        print("todo bien con el sintactico")
     for i in result_sem:
         textoResultadoAnalisis.insert(1.0, str(i))
 
